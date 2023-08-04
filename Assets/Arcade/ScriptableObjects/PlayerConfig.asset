@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcbe2d7dc5534222b9ec4b1eb01c937b, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: 
+  playerFireRange: 5
+  playerFireSpeed: 0.2
+  playerDamage: 1
+  playerBulletSpeed: 7
+  playerSpeed: 5

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc6795de051547629838bbac9d5b6477, type: 3}
+  m_Name: Gameplay Prefab Container
+  m_EditorClassIdentifier: 
+  PlayerControllerPrefab: {fileID: 8475397603811511033, guid: 1b99125a0f306ca4f85f16d3aa114d0c, type: 3}
+  EnemyControllerPrefab: {fileID: 2117057112998468477, guid: 39953147e85f1644dbee6e9c307ce877, type: 3}
+  BulletPrefab: {fileID: 1853282300378473951, guid: d7d143686d012b94e92b21d3f8f631eb, type: 3}
