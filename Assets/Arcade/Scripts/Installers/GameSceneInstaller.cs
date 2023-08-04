@@ -17,13 +17,12 @@ namespace Arcade.Scripts.Installers
 {
     public class GameSceneInstaller : MonoInstaller
     {
-        [SerializeField]
-        private GameplayPrefabContainer gameplayPrefabContainer;
-        [SerializeField]
-        private Transform playerTransformPoint;
-        [SerializeField] 
-        private EnemyTransformsConfig enemyTransforms;
-        
+        [SerializeField] private GameplayPrefabContainer gameplayPrefabContainer;
+
+        [SerializeField] private Transform playerTransformPoint;
+
+        [SerializeField] private EnemyTransformsConfig enemyTransforms;
+
         public override void InstallBindings()
         {
             Container.BindInstance(gameplayPrefabContainer);
@@ -31,13 +30,14 @@ namespace Arcade.Scripts.Installers
             Container.Bind<IInputController>().To<StandaloneInputController>().AsSingle();
             Container.Bind<IPauseController>().To<PauseController>().AsSingle();
             Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
-            Container.Bind(typeof(GameProcessor), typeof(ITickable), typeof(IDisposable)).To<GameProcessor>().AsSingle();
+            Container.Bind(typeof(GameProcessor), typeof(ITickable), typeof(IDisposable)).To<GameProcessor>()
+                .AsSingle();
             Container.Bind<IPathPredictor>().To<PathPredictor>().AsSingle();
             Container.Bind<IWinConditionChecker>().To<WinConditionChecker>().AsSingle();
 
             InstallFactories();
         }
-        
+
         private void InstallFactories()
         {
             Container.BindFactory<float, float, int, float, float, int, PlayerController, PlayerFactory>()

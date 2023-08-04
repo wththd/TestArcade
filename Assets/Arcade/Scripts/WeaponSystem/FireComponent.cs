@@ -1,4 +1,3 @@
-using Arcade.Scripts.Configs;
 using UnityEngine;
 using Zenject;
 
@@ -6,16 +5,14 @@ namespace Arcade.Scripts.WeaponSystem
 {
     public class FireComponent : BaseFireComponent
     {
+        [SerializeField] private Transform weaponTransformPosition;
+
+        private BulletFactory bulletFactory;
+        private float lastShotTime;
         public override float ProjectileSpeed => projectileSpeed;
         public override Vector2 WeaponPosition => weaponTransformPosition.position;
         public override int WeaponDamage => weaponDamage;
 
-        private BulletFactory bulletFactory;
-        private float lastShotTime;
-
-        [SerializeField]
-        private Transform weaponTransformPosition;
-        
         [Inject]
         private void Inject(BulletFactory bulletFactory)
         {

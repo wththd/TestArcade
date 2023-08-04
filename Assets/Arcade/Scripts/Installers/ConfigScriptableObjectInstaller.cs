@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Arcade.Scripts.Configs;
 using Arcade.Scripts.Extensions;
@@ -11,19 +10,11 @@ namespace Arcade.Scripts.Installers
     [CreateAssetMenu(menuName = "Installers/ConfigInstaller", fileName = "ConfigScriptableObjectInstaller")]
     public class ConfigScriptableObjectInstaller : ScriptableObjectInstaller
     {
-        [SerializeField] 
-        private EnemyInitialConfig enemyConfig;
-        [SerializeField] 
-        private GameplayConfig gameplayConfig;
-        [SerializeField] 
-        private PlayerConfig playerConfig;
+        [SerializeField] private EnemyInitialConfig enemyConfig;
 
-        public override void InstallBindings()
-        {
-            Container.BindInstance(enemyConfig);
-            Container.BindInstance(gameplayConfig);
-            Container.BindInstance(playerConfig);
-        }
+        [SerializeField] private GameplayConfig gameplayConfig;
+
+        [SerializeField] private PlayerConfig playerConfig;
 
         private void OnValidate()
         {
@@ -31,15 +22,20 @@ namespace Arcade.Scripts.Installers
                                               BindingFlags.NonPublic |
                                               BindingFlags.Instance |
                                               BindingFlags.Static;
-            
+
             foreach (var field in GetType().GetFields(bindingFlags))
-            {
                 if (field.FieldType.ImplementsInterface(typeof(IValidatable)))
                 {
                     var iValidatable = (IValidatable)field.GetValue(this);
                     iValidatable.Validate();
                 }
-            }
+        }
+
+        public override void InstallBindings()
+        {
+            Container.BindInstance(enemyConfig);
+            Container.BindInstance(gameplayConfig);
+            Container.BindInstance(playerConfig);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Arcade.Scripts.MoveSystem;
 using UnityEngine;
@@ -8,22 +7,21 @@ namespace Arcade.Scripts.WeaponSystem
 {
     public class Bullet : MonoBehaviour
     {
-        [SerializeField]
-        private BulletMoveTargetComponent moveComponent;
-        [SerializeField] 
-        private BulletDamageComponent damageComponent;
-        
+        [SerializeField] private BulletMoveTargetComponent moveComponent;
+
+        [SerializeField] private BulletDamageComponent damageComponent;
+
+        private void Awake()
+        {
+            StartCoroutine(DestroyRoutine());
+        }
+
         [Inject]
         private void Inject(Vector3 position, Vector3 target, float speed, int damage)
         {
             transform.position = position;
             moveComponent.Init(target, speed);
             damageComponent.Setup(damage, DestroySelf);
-        }
-
-        private void Awake()
-        {
-            StartCoroutine(DestroyRoutine());
         }
 
         private IEnumerator DestroyRoutine()

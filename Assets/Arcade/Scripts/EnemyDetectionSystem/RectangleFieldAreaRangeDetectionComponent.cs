@@ -1,7 +1,5 @@
 using System;
-using Arcade.Scripts.Configs;
 using UnityEngine;
-using Zenject;
 
 namespace Arcade.Scripts.EnemyDetectionSystem
 {

@@ -7,15 +7,15 @@ namespace Arcade.Scripts.EnemySpawnSystem
 {
     public class EnemySpawner : IEnemySpawner
     {
-        public List<EnemyController> Enemies { get; private set; }
+        private readonly EnemyFactory enemyFactory;
 
-        private EnemyInitialConfig enemyInitialConfig;
-        private EnemyFactory enemyFactory;
-        private EnemyTransformsConfig enemyTransformsConfig;
-        private float lastSpawnTime;
+        private readonly EnemyInitialConfig enemyInitialConfig;
+        private readonly EnemyTransformsConfig enemyTransformsConfig;
         private float cooldown;
+        private float lastSpawnTime;
 
-        public EnemySpawner(EnemyInitialConfig enemyInitialConfig, EnemyFactory enemyFactory, EnemyTransformsConfig enemyTransformsConfig)
+        public EnemySpawner(EnemyInitialConfig enemyInitialConfig, EnemyFactory enemyFactory,
+            EnemyTransformsConfig enemyTransformsConfig)
         {
             this.enemyInitialConfig = enemyInitialConfig;
             this.enemyFactory = enemyFactory;
@@ -23,6 +23,8 @@ namespace Arcade.Scripts.EnemySpawnSystem
 
             Enemies = new List<EnemyController>();
         }
+
+        public List<EnemyController> Enemies { get; }
 
         public bool CanSpawn()
         {
@@ -50,7 +52,8 @@ namespace Arcade.Scripts.EnemySpawnSystem
         {
             speed = Random.Range(1, enemyInitialConfig.EnemyMaximumSpeed);
             cooldown = Random.Range(1, enemyInitialConfig.EnemySpawnCooldown);
-            parent = enemyTransformsConfig.EnemiesTransforms[Random.Range(0, enemyTransformsConfig.EnemiesTransforms.Count)];
+            parent = enemyTransformsConfig.EnemiesTransforms[
+                Random.Range(0, enemyTransformsConfig.EnemiesTransforms.Count)];
             sprite = enemyInitialConfig.EnemySprites[Random.Range(0, enemyInitialConfig.EnemySprites.Count)];
         }
     }

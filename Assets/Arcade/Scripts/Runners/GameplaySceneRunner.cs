@@ -9,28 +9,45 @@ namespace Arcade.Scripts.Runners
 {
     public class GameplaySceneRunner : MonoBehaviour
     {
-        private PlayerFactory playerFactory;
-        private GameProcessor gameProcessor;
-        private PlayerConfig playerConfig;
-        private IPauseController pauseController;
-        private GameplayConfig gameplayConfig;
+        [SerializeField] private GameplayScreen gameplayScreen;
 
-        [SerializeField] 
-        private GameplayScreen gameplayScreen;
-        [SerializeField] 
-        private GameEndScreen gameEndScreen;
+        [SerializeField] private GameEndScreen gameEndScreen;
+
+        private GameplayConfig gameplayConfig;
+        private GameProcessor gameProcessor;
+        private IPauseController pauseController;
 
         private PlayerController player;
-        
+        private PlayerConfig playerConfig;
+        private PlayerFactory playerFactory;
+
+        private void Awake()
+        {
+            player = playerFactory.Create(playerConfig.PlayerFireRange, playerConfig.PlayerFireSpeed,
+                playerConfig.PlayerDamage, playerConfig.PlayerBulletSpeed, playerConfig.PlayerSpeed,
+                gameplayConfig.InitialHealth);
+            player.SetHealthChangeAction(OnHealthChanged);
+            player.SetDieAction(OnPlayerDied);
+            gameProcessor.Start(player);
+            gameplayScreen.gameObject.SetActive(true);
+        }
+
+        private void OnDestroy()
+        {
+            gameProcessor.Dispose();
+            gameProcessor.GameWon -= OnGameWon;
+        }
+
         [Inject]
-        private void Inject(PlayerFactory playerFactory, GameplayConfig gameplayConfig, GameProcessor gameProcessor, PlayerConfig playerConfig, IPauseController pauseController)
+        private void Inject(PlayerFactory playerFactory, GameplayConfig gameplayConfig, GameProcessor gameProcessor,
+            PlayerConfig playerConfig, IPauseController pauseController)
         {
             this.playerFactory = playerFactory;
             this.gameProcessor = gameProcessor;
             this.playerConfig = playerConfig;
             this.pauseController = pauseController;
             this.gameplayConfig = gameplayConfig;
-            
+
             gameplayScreen.SetHealth(gameplayConfig.InitialHealth);
             gameProcessor.GameWon += OnGameWon;
         }
@@ -38,15 +55,6 @@ namespace Arcade.Scripts.Runners
         private void OnGameWon()
         {
             EndGame(true);
-        }
-
-        private void Awake()
-        {
-            player = playerFactory.Create(playerConfig.PlayerFireRange, playerConfig.PlayerFireSpeed, playerConfig.PlayerDamage, playerConfig.PlayerBulletSpeed, playerConfig.PlayerSpeed, gameplayConfig.InitialHealth);
-            player.SetHealthChangeAction(OnHealthChanged);
-            player.SetDieAction(OnPlayerDied);
-            gameProcessor.Start(player);
-            gameplayScreen.gameObject.SetActive(true);
         }
 
         private void OnHealthChanged(int health)
@@ -66,12 +74,6 @@ namespace Arcade.Scripts.Runners
             gameplayScreen.gameObject.SetActive(false);
             gameEndScreen.gameObject.SetActive(true);
             pauseController.Pause();
-        }
-
-        private void OnDestroy()
-        {
-            gameProcessor.Dispose();
-            gameProcessor.GameWon -= OnGameWon;
         }
     }
 }

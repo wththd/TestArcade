@@ -4,12 +4,12 @@ namespace Arcade.Scripts.WeaponSystem
 {
     public abstract class BaseFireComponent : MonoBehaviour, ILaunching
     {
+        protected float fireRate;
+        protected float projectileSpeed;
+        protected int weaponDamage;
         public abstract float ProjectileSpeed { get; }
         public abstract Vector2 WeaponPosition { get; }
         public abstract int WeaponDamage { get; }
-        protected float projectileSpeed;
-        protected float fireRate;
-        protected int weaponDamage;
         public abstract bool CanLaunch();
         public abstract void Launch(Vector3 direction);
 

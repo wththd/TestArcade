@@ -8,18 +8,12 @@ namespace Arcade.Scripts.PauseSystem
 
         public void Pause()
         {
-            foreach (var pausable in Pausables)
-            {
-                pausable.Pause();
-            }
+            foreach (var pausable in Pausables) pausable.Pause();
         }
 
         public void Resume()
         {
-            foreach (var pausable in Pausables)
-            {
-                pausable.Resume();
-            }
+            foreach (var pausable in Pausables) pausable.Resume();
         }
 
         public void AddPausable(IPausable pausable)

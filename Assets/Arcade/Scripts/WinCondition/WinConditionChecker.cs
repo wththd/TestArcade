@@ -6,21 +6,18 @@ namespace Arcade.Scripts.WinCondition
 {
     public class WinConditionChecker : IWinConditionChecker
     {
-        private List<IWinCondition> currentConditions;
+        private readonly List<IWinCondition> currentConditions;
 
         public WinConditionChecker(GameplayConfig gameplayConfig)
         {
-            currentConditions = new List<IWinCondition>();  
+            currentConditions = new List<IWinCondition>();
             var enemyDieWinCondition = new EnemyDiedWinCondition(gameplayConfig.EnemyWinCount);
             currentConditions.Add(enemyDieWinCondition);
         }
 
         public void ProcessEvent(string eventName, params object[] payload)
         {
-            foreach (var condition in currentConditions)
-            {
-                condition.ProcessEvent(eventName, payload);
-            }
+            foreach (var condition in currentConditions) condition.ProcessEvent(eventName, payload);
         }
 
         public bool IsGameWon()

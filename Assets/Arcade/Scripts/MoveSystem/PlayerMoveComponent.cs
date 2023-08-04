@@ -1,4 +1,3 @@
-using System;
 using Arcade.Scripts.EventListeners;
 using Arcade.Scripts.InputSystem;
 using Arcade.Scripts.MoveBlockSystem;
@@ -10,16 +9,9 @@ namespace Arcade.Scripts.MoveSystem
 {
     public class PlayerMoveComponent : BaseMoveComponent
     {
+        [SerializeField] private BaseTriggerListener<Collider2D> triggerEventListener;
+
         private IPlayerMoveBorder moveBorder;
-
-        [SerializeField]
-        private BaseTriggerListener<Collider2D> triggerEventListener;
-
-        [Inject]
-        private void Inject(IInputController inputController)
-        {
-            this.inputController = inputController;
-        }
 
         protected override void Awake()
         {
@@ -28,6 +20,18 @@ namespace Arcade.Scripts.MoveSystem
             Assert.IsNotNull(triggerEventListener);
             triggerEventListener.OnTriggerEnter += OnTriggered;
             triggerEventListener.OnTriggerLeave += OnTriggerLeave;
+        }
+
+        private void OnDestroy()
+        {
+            triggerEventListener.OnTriggerEnter -= OnTriggered;
+            triggerEventListener.OnTriggerLeave -= OnTriggerLeave;
+        }
+
+        [Inject]
+        private void Inject(IInputController inputController)
+        {
+            this.inputController = inputController;
         }
 
         private void OnTriggered(Collider2D other)
@@ -41,50 +45,26 @@ namespace Arcade.Scripts.MoveSystem
 
         private void OnTriggerLeave(Collider2D other)
         {
-            if (other.CompareTag("PlayerMoveAreaBorder"))
-            {
-                moveBorder = null;
-            }
+            if (other.CompareTag("PlayerMoveAreaBorder")) moveBorder = null;
         }
 
 
         protected override void UpdateMove()
         {
-            if (moveBorder != null)
-            {
-                UpdateSpeedAccordingBorders();
-            }
+            if (moveBorder != null) UpdateSpeedAccordingBorders();
         }
 
         private void UpdateSpeedAccordingBorders()
         {
             const float radius = 0.286f;
             moveBorder.CalculateBlockState(cachedTransform.position, radius);
-            if (moveBorder.CurrentState.HasFlag(BlockState.Down) && currentSpeed.y < 0)
-            {
-                currentSpeed.y = 0;
-            }
+            if (moveBorder.CurrentState.HasFlag(BlockState.Down) && currentSpeed.y < 0) currentSpeed.y = 0;
 
-            if (moveBorder.CurrentState.HasFlag(BlockState.Up) && currentSpeed.y > 0)
-            {
-                currentSpeed.y = 0;
-            }
+            if (moveBorder.CurrentState.HasFlag(BlockState.Up) && currentSpeed.y > 0) currentSpeed.y = 0;
 
-            if (moveBorder.CurrentState.HasFlag(BlockState.Left) && currentSpeed.x < 0)
-            {
-                currentSpeed.x = 0;
-            }
+            if (moveBorder.CurrentState.HasFlag(BlockState.Left) && currentSpeed.x < 0) currentSpeed.x = 0;
 
-            if (moveBorder.CurrentState.HasFlag(BlockState.Right) && currentSpeed.x > 0)
-            {
-                currentSpeed.x = 0;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            triggerEventListener.OnTriggerEnter -= OnTriggered;
-            triggerEventListener.OnTriggerLeave -= OnTriggerLeave;
+            if (moveBorder.CurrentState.HasFlag(BlockState.Right) && currentSpeed.x > 0) currentSpeed.x = 0;
         }
     }
 }

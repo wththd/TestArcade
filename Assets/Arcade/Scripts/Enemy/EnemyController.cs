@@ -10,26 +10,40 @@ namespace Arcade.Scripts.Enemy
 {
     public class EnemyController : MonoBehaviour, IPausable
     {
-        public event Action<EnemyController> Destroyed;
-        
-        [SerializeField] 
-        private BaseMoveComponent moveComponent;
-        [SerializeField] 
-        private EnemyHealthComponent healthComponent;
-        [SerializeField] 
-        private Trigger2DEventListener triggerListener;
+        [SerializeField] private BaseMoveComponent moveComponent;
 
-        [SerializeField] 
-        private SpriteRenderer spriteRenderer;
+        [SerializeField] private EnemyHealthComponent healthComponent;
+
+        [SerializeField] private Trigger2DEventListener triggerListener;
+
+        [SerializeField] private SpriteRenderer spriteRenderer;
 
         private float configSpeed;
+        private Action enemyDieAction;
         private IPauseController pauseController;
+
+        private Action playerDamageAction;
 
         public float Speed => moveComponent.Speed;
 
-        private Action playerDamageAction;
-        private Action enemyDieAction;
-        
+        private void OnDestroy()
+        {
+            pauseController.RemovePausable(this);
+            triggerListener.OnTriggerEnter -= OnTriggerEntered;
+        }
+
+        public void Pause()
+        {
+            if (moveComponent != null) moveComponent.SetSpeed(0);
+        }
+
+        public void Resume()
+        {
+            if (moveComponent != null) moveComponent.SetSpeed(configSpeed);
+        }
+
+        public event Action<EnemyController> Destroyed;
+
         [Inject]
         private void Inject(float speed, int health, Sprite enemySprite, IPauseController pauseController)
         {
@@ -44,7 +58,7 @@ namespace Arcade.Scripts.Enemy
                 healthComponent.Setup(health);
                 healthComponent.Died += HealthComponentOnDied;
             }
-            
+
             triggerListener.OnTriggerEnter += OnTriggerEntered;
             spriteRenderer.sprite = enemySprite;
 
@@ -75,28 +89,6 @@ namespace Arcade.Scripts.Enemy
         public void SetDieAction(Action action)
         {
             enemyDieAction = action;
-        }
-
-        public void Pause()
-        {
-            if (moveComponent != null)
-            {
-                moveComponent.SetSpeed(0);
-            }
-        }
-
-        public void Resume()
-        {
-            if (moveComponent != null)
-            {
-                moveComponent.SetSpeed(configSpeed);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            pauseController.RemovePausable(this);
-            triggerListener.OnTriggerEnter -= OnTriggerEntered;
         }
 
         private void DestroySelf()

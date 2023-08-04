@@ -8,15 +8,14 @@ namespace Arcade.Scripts.UI
     {
         private const string WinText = "Победа";
         private const string LooseText = "Поражение";
-        
-        [SerializeField] 
-        private TextMeshProUGUI resultText;
-        
+
+        [SerializeField] private TextMeshProUGUI resultText;
+
         public void SetResult(bool win)
         {
             resultText.text = win ? WinText : LooseText;
         }
-        
+
         public void OnRestartClick()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
