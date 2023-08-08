@@ -1,5 +1,7 @@
 using System;
+using Arcade.Scripts.PathPrediction;
 using UnityEngine;
+using Zenject;
 
 namespace Arcade.Scripts.MoveBlockSystem
 {
@@ -7,10 +9,18 @@ namespace Arcade.Scripts.MoveBlockSystem
     public class PlayerAreaMoveBorder : MonoBehaviour, IPlayerMoveBorder
     {
         [SerializeField] private EdgeCollider2D edgeCollider;
+        private IPathPredictor pathPredictor;
+
+        [Inject]
+        private void Inject(IPathPredictor pathPredictor)
+        {
+            this.pathPredictor = pathPredictor;
+        }
 
         private void Awake()
         {
             if (edgeCollider == null) edgeCollider = GetComponent<EdgeCollider2D>();
+            pathPredictor.MinYPosition = edgeCollider.bounds.max.y;
         }
 
         public BlockState CurrentState { get; private set; }
@@ -32,5 +42,7 @@ namespace Arcade.Scripts.MoveBlockSystem
         {
             CurrentState = BlockState.None;
         }
+
+        public float TopBorderPosition { get; }
     }
 }

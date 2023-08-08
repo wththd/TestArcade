@@ -34,9 +34,7 @@ namespace Arcade.Scripts.EnemySpawnSystem
         public EnemyController Spawn()
         {
             RandomizeEnemyValues(out var speed, out var parent, out cooldown, out var sprite);
-            var enemy = enemyFactory.Create(speed, enemyInitialConfig.EnemyHealth, sprite);
-            enemy.transform.SetParent(parent);
-            enemy.transform.localPosition = Vector3.zero;
+            var enemy = enemyFactory.Create(speed, enemyInitialConfig.EnemyHealth, sprite, parent);
             enemy.Destroyed += OnDestroyed;
             Enemies.Add(enemy);
             lastSpawnTime = Time.unscaledTime;

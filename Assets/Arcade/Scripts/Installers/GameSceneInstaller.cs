@@ -43,7 +43,7 @@ namespace Arcade.Scripts.Installers
             Container.BindFactory<float, float, int, float, float, int, PlayerController, PlayerFactory>()
                 .FromComponentInNewPrefab(gameplayPrefabContainer.PlayerControllerPrefab)
                 .UnderTransform(playerTransformPoint);
-            Container.BindFactory<float, int, Sprite, EnemyController, EnemyFactory>()
+            Container.BindFactory<float, int, Sprite, Transform, EnemyController, EnemyFactory>()
                 .FromComponentInNewPrefab(gameplayPrefabContainer.EnemyControllerPrefab);
             Container.BindFactory<Vector3, Vector3, float, int, Bullet, BulletFactory>()
                 .FromComponentInNewPrefab(gameplayPrefabContainer.BulletPrefab)

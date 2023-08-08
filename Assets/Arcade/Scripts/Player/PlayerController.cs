@@ -100,13 +100,14 @@ namespace Arcade.Scripts.Player
 
         private void ShootIfNeeded()
         {
-            if (currentTarget != null)
-                if (fireComponent.CanLaunch())
+            if (currentTarget != null && fireComponent.CanLaunch())
+            {
+                if (pathPredictor.Predict(-currentTarget.Speed, currentTarget.transform.position,
+                    fireComponent.ProjectileSpeed, fireComponent.WeaponPosition, out var direction))
                 {
-                    var direction = pathPredictor.Predict(-currentTarget.Speed, currentTarget.transform.position,
-                        fireComponent.ProjectileSpeed, fireComponent.WeaponPosition);
                     fireComponent.Launch(direction);
                 }
+            }
         }
 
         private void DestroySelf()

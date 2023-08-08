@@ -45,7 +45,7 @@ namespace Arcade.Scripts.Enemy
         public event Action<EnemyController> Destroyed;
 
         [Inject]
-        private void Inject(float speed, int health, Sprite enemySprite, IPauseController pauseController)
+        private void Inject(float speed, int health, Sprite enemySprite, Transform parent, IPauseController pauseController)
         {
             if (moveComponent != null)
             {
@@ -64,6 +64,9 @@ namespace Arcade.Scripts.Enemy
 
             this.pauseController = pauseController;
             pauseController.AddPausable(this);
+            
+            transform.SetParent(parent);
+            transform.localPosition = Vector3.zero;
         }
 
         private void OnTriggerEntered(Collider2D other)
